@@ -5,13 +5,14 @@ import 'package:instagram_clone/responsive/mobilescreen_layout.dart';
 import 'package:instagram_clone/responsive/responsive_layout.dart';
 import 'package:instagram_clone/responsive/webscreen_layout.dart';
 import 'package:instagram_clone/screens/login_screen.dart';
+import 'package:instagram_clone/screens/signup_screen.dart';
 import 'package:instagram_clone/utils/color.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: "assets/.env");
 
   if (kIsWeb) {
     await Firebase.initializeApp(
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
 scaffoldBackgroundColor: mobileBackgroundColor
       ),
     // home: const ResponsiveLayout(webScreenLayout: WebscreenLayout(), mobileScreenLayout: MobilescreenLayout())
-    home: LoginScreen(),
+    home: SignupScreen(),
     ) ;
   }
 }
