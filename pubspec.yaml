@@ -29,7 +29,10 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   cloud_firestore: ^5.6.6
+  cloudinary_api: ^1.0.0
+  cloudinary_url_gen: ^1.0.0
   cupertino_icons: ^1.0.8
+  file_picker: ^10.1.2
   firebase_auth: ^5.5.2
   firebase_core: ^3.13.0
   firebase_storage: ^12.4.5

@@ -1,6 +1,8 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:instagram_clone/responsive/mobilescreen_layout.dart';
 import 'package:instagram_clone/responsive/responsive_layout.dart';
 import 'package:instagram_clone/responsive/webscreen_layout.dart';
@@ -8,12 +10,14 @@ import 'package:instagram_clone/screens/login_screen.dart';
 import 'package:instagram_clone/screens/signup_screen.dart';
 import 'package:instagram_clone/utils/color.dart';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Load environment variables
   await dotenv.load(fileName: "assets/.env");
 
+  // Firebase initialization
   if (kIsWeb) {
     await Firebase.initializeApp(
       options: FirebaseOptions(
@@ -44,8 +48,26 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: mobileBackgroundColor,
       ),
-      // home: const ResponsiveLayout(webScreenLayout: WebscreenLayout(), mobileScreenLayout: MobilescreenLayout())
-      home: SignupScreen(),
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+         builder: (context,snapshot){
+  if(snapshot.connectionState==ConnectionState.active){
+    if(snapshot.hasData){
+return   const ResponsiveLayout(webScreenLayout: WebscreenLayout(), mobileScreenLayout: MobilescreenLayout());
+
+    }
+    else if(snapshot.hasError){
+      return Center(
+        child: Text("Error: ${snapshot.error}"),
+      );
+    }
+  }
+   if(snapshot.connectionState==ConnectionState.waiting){
+            return const Center(child: CircularProgressIndicator(color: primaryColor,),);
+  }
+  
+  return LoginScreen();
+  }),
     );
   }
 }

@@ -3,6 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/resources/auth_methods.dart';
+import 'package:instagram_clone/responsive/mobilescreen_layout.dart';
+import 'package:instagram_clone/responsive/responsive_layout.dart';
+import 'package:instagram_clone/responsive/webscreen_layout.dart';
+import 'package:instagram_clone/screens/login_screen.dart';
 import 'package:instagram_clone/utils/color.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/text_field.dart';
@@ -19,7 +23,8 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
-Uint8List?_image;
+  Uint8List? _image;
+  bool _isLoading = false;
   @override
   void dispose() {
     super.dispose();
@@ -29,11 +34,51 @@ Uint8List?_image;
     _usernameController.dispose();
   }
 
-  void selectimage() async{
-   Uint8List im= await pickImage(ImageSource.gallery);
- setState(() {
-   _image=im;
- });
+  void signupuser() async {
+    if (_image == null) {
+      showSnackBar("Please select a profile picture", context);
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    String res = await AuthMethods().signUp(
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+      username: _usernameController.text.trim(),
+      bio: _bioController.text.trim(),
+      file: _image!,
+    );
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (res != 'success') {
+      // ignore: use_build_context_synchronously
+      showSnackBar(res, context);
+    } else {
+      // Navigate to home screen or next stepS
+       Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) =>    const ResponsiveLayout(webScreenLayout: WebscreenLayout(), mobileScreenLayout: MobilescreenLayout()))
+    );
+    }
+  }
+
+  void navigatetoLogin() {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => const LoginScreen()));
+  }
+
+  void selectimage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = im;
+    });
   }
 
   @override
@@ -57,12 +102,15 @@ Uint8List?_image;
               const SizedBox(height: 30),
               Stack(
                 children: [
-                  _image!=null? CircleAvatar(
-                    radius: 64,
-                    backgroundImage: MemoryImage(_image!))
-                    :CircleAvatar(
-                    radius: 64,
-                    backgroundImage: AssetImage('assets/profile_image.png')          ),
+                  _image != null
+                      ? CircleAvatar(
+                        radius: 64,
+                        backgroundImage: MemoryImage(_image!),
+                      )
+                      : CircleAvatar(
+                        radius: 64,
+                        backgroundImage: AssetImage('assets/profile_image.png'),
+                      ),
                   Positioned(
                     bottom: -10,
                     left: 80,
@@ -102,16 +150,18 @@ Uint8List?_image;
               const SizedBox(height: 20),
 
               InkWell(
-                onTap: () async {
-                  String res = await AuthMethods().signUp(
-                    email: _emailController.text,
-                    password: _passwordController.text,
-                    username: _usernameController.text,
-                    bio: _bioController.text,
-                  );
-                  print("Result from signUp(): $res");
-                },
+                onTap: signupuser,
                 child: Container(
+                  // ignore: sort_child_properties_last
+                  child:
+                      _isLoading
+                          ? Center(
+                            child: CircularProgressIndicator(
+                              color: primaryColor,
+                            ),
+                          )
+                          : const Text('SignUp'),
+
                   width: double.infinity,
                   height: 50,
                   padding: EdgeInsets.symmetric(vertical: 12),
@@ -122,7 +172,6 @@ Uint8List?_image;
                     ),
                     color: blueColor,
                   ),
-                  child: const Text('SignUp'),
                 ),
               ),
               const SizedBox(height: 20),
@@ -135,7 +184,7 @@ Uint8List?_image;
                     child: const Text("Already have an account?"),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: navigatetoLogin,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         vertical: 10,
