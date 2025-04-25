@@ -61,10 +61,15 @@ class _SignupScreenState extends State<SignupScreen> {
       showSnackBar(res, context);
     } else {
       // Navigate to home screen or next stepS
-       Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (context) =>    const ResponsiveLayout(webScreenLayout: WebscreenLayout(), mobileScreenLayout: MobilescreenLayout()))
-    );
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder:
+              (context) => const ResponsiveLayout(
+                webScreenLayout: WebscreenLayout(),
+                mobileScreenLayout: MobilescreenLayout(),
+              ),
+        ),
+      );
     }
   }
 
