@@ -1,16 +1,31 @@
-# instagram_clone
+# Instagram Clone
 
-A new Flutter project.
+## Project Overview
+This project is a clone of Instagram, built using **Flutter** for the frontend, **Firebase** for authentication and real-time database, and **Cloudinary** for image storage. It allows users to sign up, log in, post images, like and comment on posts, and follow/unfollow other users. The app provides a smooth and engaging user experience similar to Instagram.
 
-## Getting Started
+> 🚧 **Note:** This is an ongoing project and is currently under development. New features and improvements are being added regularly.
 
-This project is a starting point for a Flutter application.
+## Features
+- **User Authentication**: Sign up and log in using Firebase Authentication.
+- **Post Creation**: Upload images with captions, which are stored in Cloudinary.
+- **Feed**: View posts from users you follow in a scrollable feed.
+- **Likes and Comments**: Like and comment on posts made by others.
+- **Follow/Unfollow**: Follow or unfollow users to personalize your feed.
+- **Profile Page**: View and edit your profile, and see all your posts.
+  
+## Tech Stack
+- **Frontend**: Flutter
+- **Backend**: Firebase (Authentication, Firestore)
+- **Image Storage**: Cloudinary
 
-A few resources to get you started if this is your first Flutter project:
+## 📸 Screenshots
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+<img src="assets/ss1.png" alt="Login Screen" width="300"/>
+<img src="assets/ss2.png" alt="Signup Screen" width="300"/>
+<img src="assets/ss3.png" alt="Upload Post" width="300"/>
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
+
+
+
